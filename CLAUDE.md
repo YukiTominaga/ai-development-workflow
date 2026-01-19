@@ -337,6 +337,14 @@ const handleUpdate = useCallback((task) => {...}, []);
 
 `mcp__github, Read, Grep, Glob, WebSearch, LS, Edit, Bash(npm:*)`
 
+### 重要な制約
+
+**`npm run lint`および`npm run build`は実行しないこと。**
+
+- これらのコマンドはGitHub ActionsのCI/CDパイプラインで自動実行されます
+- ローカルでの手動実行やClaude Codeによる実行は不要です
+- コード変更後、自動的にCIが品質チェックを行います
+
 ### CI/CD注意事項
 
 #### 必須確認
