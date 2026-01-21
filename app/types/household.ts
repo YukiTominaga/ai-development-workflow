@@ -20,3 +20,10 @@ export interface MonthlySummary {
   expense: number;
   balance: number;
 }
+
+export interface Budget {
+  id: string;
+  category: string;
+  amount: number;
+  icon: string;
+}

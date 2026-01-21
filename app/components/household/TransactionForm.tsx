@@ -126,11 +126,12 @@ export function TransactionForm({ initialData, onSubmit, onCancel, defaultDate }
               <Select.Viewport className="p-2">
                 {categories.map((cat) => (
                   <Select.Item
-                    key={cat}
-                    value={cat}
-                    className="px-4 py-2 rounded-md cursor-pointer hover:bg-blue-50 focus:bg-blue-50 focus:outline-none data-[state=checked]:bg-blue-100"
+                    key={cat.name}
+                    value={cat.name}
+                    className="px-4 py-2 rounded-md cursor-pointer hover:bg-blue-50 focus:bg-blue-50 focus:outline-none data-[state=checked]:bg-blue-100 flex items-center gap-2"
                   >
-                    <Select.ItemText>{cat}</Select.ItemText>
+                    <span className="text-lg">{cat.icon}</span>
+                    <Select.ItemText>{cat.name}</Select.ItemText>
                   </Select.Item>
                 ))}
               </Select.Viewport>
