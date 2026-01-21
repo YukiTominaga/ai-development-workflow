@@ -1,6 +1,6 @@
 'use client';
 
-import type { Transaction } from '@/app/types/household';
+import type { Transaction, CategorySummary } from '@/app/types/household';
 import { formatCurrency, formatMonth, formatDate } from '@/app/utils/date';
 import { getCategoryConfig } from '@/app/constants/categories';
 import PieChart from './PieChart';
@@ -10,7 +10,7 @@ interface DashboardProps {
   setSelectedMonth: (month: string) => void;
   transactions: Transaction[];
   getMonthlySummary: (month: string) => { income: number; expense: number; balance: number };
-  getCategorySummary: (month: string, type: 'income' | 'expense') => Array<{ category: string; amount: number; percentage: number }>;
+  getCategorySummary: (month: string, type: 'income' | 'expense') => CategorySummary[];
   getMonthlyTransactions: (month: string) => Transaction[];
   getTotalBalance: () => number;
 }
