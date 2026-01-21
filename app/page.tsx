@@ -162,11 +162,8 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 py-8 px-4">
+    <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 py-8 px-4">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-8 text-center">
-          TODO管理アプリ
-        </h1>
 
         {/* Add New Task */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
