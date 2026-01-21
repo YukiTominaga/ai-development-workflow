@@ -1,6 +1,6 @@
 'use client';
 
-import type { Transaction } from '@/app/types/household';
+import type { CategorySummary } from '@/app/types/household';
 import { formatCurrency } from '@/app/utils/date';
 import { getCategoryConfig } from '@/app/constants/categories';
 import PieChart from './PieChart';
@@ -11,7 +11,7 @@ interface AnalysisProps {
   getCategorySummary: (
     month: string,
     type: 'income' | 'expense'
-  ) => Array<{ category: string; amount: number; percentage: number }>;
+  ) => CategorySummary[];
   getMonthlySummary: (month: string) => {
     income: number;
     expense: number;
