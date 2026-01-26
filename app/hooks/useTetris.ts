@@ -239,6 +239,16 @@ export function useTetris() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (gameState.isGameOver) return;
 
+      // Pause/unpause is always allowed
+      if (e.key === 'p' || e.key === 'P') {
+        e.preventDefault();
+        togglePause();
+        return;
+      }
+
+      // Other controls are blocked when paused
+      if (gameState.isPaused) return;
+
       switch (e.key) {
         case 'ArrowLeft':
           e.preventDefault();
@@ -260,17 +270,12 @@ export function useTetris() {
           e.preventDefault();
           hardDrop();
           break;
-        case 'p':
-        case 'P':
-          e.preventDefault();
-          togglePause();
-          break;
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [gameState.isGameOver, movePiece, rotate, hardDrop, togglePause]);
+  }, [gameState.isGameOver, gameState.isPaused, movePiece, rotate, hardDrop, togglePause]);
 
   return {
     gameState,
