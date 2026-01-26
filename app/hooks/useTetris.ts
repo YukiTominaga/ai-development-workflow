@@ -110,7 +110,8 @@ export function useTetris() {
       if (deltaY > 0) {
         const newBoard = mergePieceToBoard(prev.board, prev.currentPiece);
         const { newBoard: clearedBoard, linesCleared } = clearLines(newBoard);
-        const newScore = prev.score + linesCleared * 100;
+        const lineScores = [0, 100, 300, 500, 800];
+        const newScore = prev.score + (lineScores[linesCleared] || linesCleared * 100);
 
         // Check if game is over
         if (prev.nextPiece && checkCollision(clearedBoard, prev.nextPiece)) {
@@ -172,7 +173,8 @@ export function useTetris() {
 
       const newBoard = mergePieceToBoard(prev.board, droppedPiece);
       const { newBoard: clearedBoard, linesCleared } = clearLines(newBoard);
-      const newScore = prev.score + linesCleared * 100 + dropDistance * 2;
+      const lineScores = [0, 100, 300, 500, 800];
+      const newScore = prev.score + (lineScores[linesCleared] || linesCleared * 100) + dropDistance * 2;
 
       // Check if game is over
       if (prev.nextPiece && checkCollision(clearedBoard, prev.nextPiece)) {
