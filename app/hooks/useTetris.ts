@@ -1,10 +1,8 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 
-import { BOARD_WIDTH, BOARD_HEIGHT, TETROMINO_SHAPES, TETROMINO_COLORS } from '@/app/constants/tetrominos';
+import { BOARD_WIDTH, BOARD_HEIGHT, TETROMINO_SHAPES, TETROMINO_COLORS, TETROMINO_TYPES, GAME_LOOP_INTERVAL_MS, HARD_DROP_BONUS_PER_CELL } from '@/app/constants/tetrominos';
 
 import type { Board, Tetromino, TetrominoType, GameState } from '@/app/types/tetris';
-
-const TETROMINO_TYPES: TetrominoType[] = ['I', 'J', 'L', 'O', 'S', 'T', 'Z'];
 
 function createEmptyBoard(): Board {
   return Array.from({ length: BOARD_HEIGHT }, () => Array(BOARD_WIDTH).fill(null));
@@ -77,6 +75,35 @@ function clearLines(board: Board): { newBoard: Board; linesCleared: number } {
   return { newBoard, linesCleared };
 }
 
+function calculateLineScore(linesCleared: number): number {
+  const lineScores = [0, 100, 300, 500, 800];
+  return lineScores[linesCleared] || linesCleared * 100;
+}
+
+function createNextGameState(
+  prev: GameState,
+  clearedBoard: Board,
+  newScore: number
+): GameState {
+  if (prev.nextPiece && checkCollision(clearedBoard, prev.nextPiece)) {
+    return {
+      ...prev,
+      board: clearedBoard,
+      currentPiece: null,
+      isGameOver: true,
+      score: newScore,
+    };
+  }
+
+  return {
+    ...prev,
+    board: clearedBoard,
+    currentPiece: prev.nextPiece,
+    nextPiece: createRandomTetromino(),
+    score: newScore,
+  };
+}
+
 export function useTetris() {
   const [gameState, setGameState] = useState<GameState>(() => ({
     board: createEmptyBoard(),
@@ -110,27 +137,9 @@ export function useTetris() {
       if (deltaY > 0) {
         const newBoard = mergePieceToBoard(prev.board, prev.currentPiece);
         const { newBoard: clearedBoard, linesCleared } = clearLines(newBoard);
-        const lineScores = [0, 100, 300, 500, 800];
-        const newScore = prev.score + (lineScores[linesCleared] || linesCleared * 100);
+        const newScore = prev.score + calculateLineScore(linesCleared);
 
-        // Check if game is over
-        if (prev.nextPiece && checkCollision(clearedBoard, prev.nextPiece)) {
-          return {
-            ...prev,
-            board: clearedBoard,
-            currentPiece: null,
-            isGameOver: true,
-            score: newScore,
-          };
-        }
-
-        return {
-          ...prev,
-          board: clearedBoard,
-          currentPiece: prev.nextPiece,
-          nextPiece: createRandomTetromino(),
-          score: newScore,
-        };
+        return createNextGameState(prev, clearedBoard, newScore);
       }
 
       return prev;
@@ -173,27 +182,9 @@ export function useTetris() {
 
       const newBoard = mergePieceToBoard(prev.board, droppedPiece);
       const { newBoard: clearedBoard, linesCleared } = clearLines(newBoard);
-      const lineScores = [0, 100, 300, 500, 800];
-      const newScore = prev.score + (lineScores[linesCleared] || linesCleared * 100) + dropDistance * 2;
+      const newScore = prev.score + calculateLineScore(linesCleared) + dropDistance * HARD_DROP_BONUS_PER_CELL;
 
-      // Check if game is over
-      if (prev.nextPiece && checkCollision(clearedBoard, prev.nextPiece)) {
-        return {
-          ...prev,
-          board: clearedBoard,
-          currentPiece: null,
-          isGameOver: true,
-          score: newScore,
-        };
-      }
-
-      return {
-        ...prev,
-        board: clearedBoard,
-        currentPiece: prev.nextPiece,
-        nextPiece: createRandomTetromino(),
-        score: newScore,
-      };
+      return createNextGameState(prev, clearedBoard, newScore);
     });
   }, []);
 
@@ -227,14 +218,14 @@ export function useTetris() {
 
     gameLoopRef.current = setInterval(() => {
       movePiece(0, 1);
-    }, 1000);
+    }, GAME_LOOP_INTERVAL_MS);
 
     return () => {
       if (gameLoopRef.current) {
         clearInterval(gameLoopRef.current);
       }
     };
-  }, [gameState.isGameOver, gameState.isPaused, movePiece]);
+  }, [gameState.isGameOver, gameState.isPaused]);
 
   // Keyboard controls
   useEffect(() => {
@@ -277,7 +268,7 @@ export function useTetris() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [gameState.isGameOver, gameState.isPaused, movePiece, rotate, hardDrop, togglePause]);
+  }, [gameState.isGameOver, gameState.isPaused]);
 
   return {
     gameState,

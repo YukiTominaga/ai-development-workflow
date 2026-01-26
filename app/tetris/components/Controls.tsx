@@ -36,14 +36,14 @@ export function Controls({ onReset, onPause, isGameOver, isPaused }: ControlsPro
         {!isGameOver && (
           <button
             onClick={onPause}
-            className="w-full px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors text-sm font-medium"
+            className="w-full px-6 py-3 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors font-medium"
           >
             {isPaused ? 'Resume' : 'Pause'}
           </button>
         )}
         <button
           onClick={onReset}
-          className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
+          className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
         >
           {isGameOver ? 'New Game' : 'Restart'}
         </button>

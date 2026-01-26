@@ -3,6 +3,11 @@ import type { TetrominoType } from '@/app/types/tetris';
 export const BOARD_WIDTH = 10;
 export const BOARD_HEIGHT = 20;
 
+export const TETROMINO_TYPES: TetrominoType[] = ['I', 'J', 'L', 'O', 'S', 'T', 'Z'];
+
+export const GAME_LOOP_INTERVAL_MS = 1000;
+export const HARD_DROP_BONUS_PER_CELL = 2;
+
 export const TETROMINO_SHAPES: Record<TetrominoType, number[][]> = {
   I: [
     [0, 0, 0, 0],
