@@ -7,8 +7,18 @@ export function createEmptyBoard(): Board {
   );
 }
 
+// 7-bag algorithm: ensures fair distribution of tetrominos
+let tetrominoBag: TetrominoType[] = [];
+
+function refillBag(): void {
+  tetrominoBag = [...TETROMINO_TYPES].sort(() => Math.random() - 0.5);
+}
+
 export function createRandomTetromino(): Tetromino {
-  const type = TETROMINO_TYPES[Math.floor(Math.random() * TETROMINO_TYPES.length)];
+  if (tetrominoBag.length === 0) {
+    refillBag();
+  }
+  const type = tetrominoBag.pop()!;
   return createTetromino(type);
 }
 
